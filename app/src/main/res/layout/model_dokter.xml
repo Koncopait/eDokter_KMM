@@ -30,7 +30,7 @@
             android:text="Name"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/colorPrimary"
-            android:textSize="20dp" />
+            android:textSize="18dp" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -49,37 +49,28 @@
             android:id="@+id/sp_dokter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView"
             android:layout_marginLeft="11dp"
             android:layout_marginStart="11dp"
+            android:layout_toEndOf="@+id/imageView"
+            android:layout_toRightOf="@+id/imageView"
             android:fontFamily="sans-serif-light"
             android:text="Sp....................."
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="15dp"
-            android:layout_alignTop="@+id/imageView"
-            android:layout_toRightOf="@+id/imageView"
-            android:layout_toEndOf="@+id/imageView" />
+            android:textSize="12dp" />
 
-        <RelativeLayout
-            android:id="@+id/rel2"
+
+        <Button
+            android:id="@+id/btn_daftarperiksa2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="250sp"
-            android:layout_above="@+id/emailTxt">
-
-            <Button
-                android:id="@+id/btn_daftarperiksa2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/ButtomNav"
-                android:text="Daftar"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"/>
-
-        </RelativeLayout>
+            android:layout_alignBottom="@+id/sp_dokter"
+            android:layout_toEndOf="@+id/nameTxt"
+            android:layout_toRightOf="@+id/nameTxt"
+            android:backgroundTint="@color/ButtomNav"
+            android:text="Daftar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
 
     </RelativeLayout>
 
