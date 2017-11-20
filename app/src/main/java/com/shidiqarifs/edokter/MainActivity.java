@@ -9,8 +9,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.shidiqarifs.edokter.AccountFragment;
+import com.shidiqarifs.edokter.Helper.UserSessionManager;
 import com.shidiqarifs.edokter.HomeFragment;
 import com.shidiqarifs.edokter.R;
+
+import java.util.HashMap;
 
 /**
  * Created by shidiqarifs on 31/10/2017.
@@ -19,15 +22,25 @@ import com.shidiqarifs.edokter.R;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     BottomNavigationView bottomNavigationView;
+    UserSessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        session = new UserSessionManager(getApplicationContext());
         if(savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment, HomeFragment.newInstance())
                     .commit();
+        }
+
+        if(session.checkLogin())
+            finish();
+        if (!session.checkLogin()){
+            HashMap<String, String> user = session.getUserDetails();
+        }else{
+            session.logoutUser();
         }
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
