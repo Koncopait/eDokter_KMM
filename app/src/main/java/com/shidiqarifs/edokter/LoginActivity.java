@@ -60,6 +60,7 @@ public class LoginActivity extends Activity  {
     EditText username_et, password_et;
     String username,password;
     String getPassword;
+    TextView forgotpass,sigup;
     private DatabaseHandler_Doctor databaseHelper;
     private Dokter dokter;
     @Override
@@ -68,11 +69,12 @@ public class LoginActivity extends Activity  {
         setContentView(R.layout.activity_login);
         login = (Button) findViewById(R.id.btn_login);
         session = new UserSessionManager(getApplicationContext());
-        register = (TextView) findViewById(R.id.signup);
+        forgotpass = (TextView) findViewById(R.id.forgotpass);
+        sigup = (TextView) findViewById(R.id.signup);
         username_et = (EditText) findViewById(R.id.username);
         password_et = (EditText) findViewById(R.id.password);
         databaseHelper = new DatabaseHandler_Doctor(LoginActivity.this);
-        register.setOnClickListener(new OnClickListener() {
+        sigup.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -101,6 +103,26 @@ public class LoginActivity extends Activity  {
                     String type = "api_login";
                     new Masuk().execute(type,username,password);
                 }
+            }
+        });
+        forgotpass.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent forget = new Intent(LoginActivity.this, ForgotPassActivity.class);
+                startActivity(forget);
+
+            }
+        });
+
+
+        sigup.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent forget = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(forget);
+
             }
         });
 
