@@ -129,4 +129,12 @@ public class DatabaseHandler_Doctor extends SQLiteOpenHelper {
         return userList;
     }
 
+    public void deleteUser() {
+        String id="";
+        SQLiteDatabase db = this.getWritableDatabase();
+        // delete user record by id
+        db.delete(TABLE_DOKTER,null,null);
+        db.close();
+    }
+
 }
