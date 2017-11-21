@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,11 +9,14 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/Bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="2dp">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="#379ee9">
 
             <TextView
@@ -30,15 +34,16 @@
                 android:background="#379ee9"
                 android:src="@drawable/ic_more_vert_black" />
         </android.support.v7.widget.Toolbar>
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="#e7e7e7"
             android:weightSum="1"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="56dp"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar">
+            tools:layout_editor_absoluteY="56dp">
 
             <ImageView
                 android:id="@+id/circleImageView3"
@@ -66,21 +71,19 @@
                 android:inputType="text"
                 android:textColor="@color/colorPrimaryDark"
                 android:textColorHighlight="@color/colorPrimaryDark">
-
-                <requestFocus />
             </EditText>
-
-
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="524dp"
-        android:layout_marginTop="104dp"
-        android:layout_weight="1"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
+        <android.support.v7.widget.ListViewCompat
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="460dp"
+            android:layout_marginTop="104dp"
+            android:layout_weight="1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="16dp">
+        </android.support.v7.widget.ListViewCompat>
+
 </android.support.constraint.ConstraintLayout>
