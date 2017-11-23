@@ -10,6 +10,6 @@ import android.os.Bundle;
 public class ForgotPassActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgotpassword);
+        setContentView(R.layout.activity_account_pasien);
     }
 }
