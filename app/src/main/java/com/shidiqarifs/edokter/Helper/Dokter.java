@@ -9,6 +9,25 @@ public class Dokter {
     private String id_dokter;
     private String nama_dokter;
     private String spesialis_dokter;
+    private String Waktu_Mulai;
+    private String Waktu_Selesai;
+
+    public String getWaktu_Selesai() {
+        return Waktu_Selesai;
+    }
+
+    public void setWaktu_Selesai(String waktu_Selesai) {
+        Waktu_Selesai = waktu_Selesai;
+    }
+
+    public String getWaktu_Mulai() {
+
+        return Waktu_Mulai;
+    }
+
+    public void setWaktu_Mulai(String waktu_Mulai) {
+        Waktu_Mulai = waktu_Mulai;
+    }
 
     public String getSpesialis_dokter() {
         return spesialis_dokter;

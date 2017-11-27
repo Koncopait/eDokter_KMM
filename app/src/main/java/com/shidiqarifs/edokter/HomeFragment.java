@@ -142,13 +142,17 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 {
                     dokter = new Dokter();
                     JSONObject explrObject = array_data.getJSONObject(i);
-                    String doctor_id,doctor_name,doctor_spesialist;
+                    String doctor_id,doctor_name,doctor_spesialist,waktu_mulai,waktu_selesai;
                     doctor_id = explrObject.getString("ID_DOKTER");
                     doctor_name = explrObject.getString("NAMA_DOKTER");
                     doctor_spesialist = explrObject.getString("SPESIALIS");
+                    waktu_mulai = explrObject.getString("WAKTU_MULAI");
+                    waktu_selesai = explrObject.getString("WAKTU_SELESAI");
                     dokter.setId_dokter(doctor_id);
                     dokter.setNama_dokter(doctor_name);
                     dokter.setSpesialis_dokter(doctor_spesialist);
+                    dokter.setWaktu_Mulai(waktu_mulai);
+                    dokter.setWaktu_Selesai(waktu_selesai);
                     databaseHelper.addUser(dokter);
                 }
 

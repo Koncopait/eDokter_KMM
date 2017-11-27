@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.shidiqarifs.edokter.DetailActivity;
 import com.shidiqarifs.edokter.R;
 import com.shidiqarifs.edokter.Splash_Activity;
 
@@ -79,18 +80,31 @@ public class CustomAdapter_Doctor  extends BaseAdapter{
 
         }
 
+        Button daftar = (Button)view.findViewById(R.id.btn_daftarperiksa2);
         TextView nameTxt= (TextView) view.findViewById(R.id.nameTxt);
         TextView spesTxt= (TextView) view.findViewById(R.id.sp_dokter);
+        TextView timeTxt= (TextView) view.findViewById(R.id.time_dokter);
         Dokter dokter= (Dokter) this.getItem(i);
 
         final String name=dokter.getNama_dokter();
-        final String spesialis=dokter.getSpesialis_dokter();
+        final String spesialis= dokter.getSpesialis_dokter();
         final String id_dokter = dokter.getId_dokter();
+        final String time_dokter = dokter.getWaktu_Mulai()+" s/d "+ dokter.getWaktu_Selesai();
 
 
         nameTxt.setText("Dr. "+name);
-        spesTxt.setText("Spesialis : "+spesialis);
+        spesTxt.setText("Spesialis : "+ spesialis);
+        timeTxt.setText(time_dokter);
 
+
+        daftar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //OPEN DETAIL ACTIVITY
+                openDetailActivity(id_dokter,name,spesialis);
+
+            }
+        });
 
         /*view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,10 +125,10 @@ public class CustomAdapter_Doctor  extends BaseAdapter{
     ////open activity
     private void openDetailActivity(String...details)
     {
-        Intent i=new Intent(c,Splash_Activity.class);
-        i.putExtra("NAME_KEY",details[0]);
-        i.putExtra("EMAIL_KEY",details[1]);
-        i.putExtra("ID",details[2]);
+        Intent i= new Intent(c,DetailActivity.class);
+        i.putExtra("ID_DOKTER",details[0]);
+        i.putExtra("NAMA_DOKTER",details[1]);
+        i.putExtra("SPESIALIS",details[2]);
         c.startActivity(i);
 
     }

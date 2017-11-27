@@ -24,12 +24,13 @@ public class DatabaseHandler_Doctor extends SQLiteOpenHelper {
     private static final String COLUMN_DOCTOR_ID = "id_dokter";
     private static final String COLUMN_DOCTOR_NAME = "nama_dokter";
     private static final String COLUMN_DOCTOR_SPESIALIS = "spesialis";
+    private static final String COLUMN_DOCTOR_WAKTU_MULAI = "waktu_mulai";
+    private static final String COLUMN_DOCTOR_WAKTU_SELESAI = "waktu_selesai";
 
     // create table sql query
     private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_DOKTER + "("
             + COLUMN_DOCTOR_ID + " TEXT," + COLUMN_DOCTOR_NAME + " TEXT,"
-            + COLUMN_DOCTOR_SPESIALIS + " TEXT)";
-
+            + COLUMN_DOCTOR_SPESIALIS + " TEXT,"+ COLUMN_DOCTOR_WAKTU_MULAI + " TEXT,"+ COLUMN_DOCTOR_WAKTU_SELESAI + " TEXT" + ")";
     // drop table sql query
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_DOKTER;
 
@@ -71,6 +72,8 @@ public class DatabaseHandler_Doctor extends SQLiteOpenHelper {
         values.put(COLUMN_DOCTOR_ID, dokter.getId_dokter());
         values.put(COLUMN_DOCTOR_NAME, dokter.getNama_dokter());
         values.put(COLUMN_DOCTOR_SPESIALIS, dokter.getSpesialis_dokter());
+        values.put(COLUMN_DOCTOR_WAKTU_MULAI, dokter.getWaktu_Mulai());
+        values.put(COLUMN_DOCTOR_WAKTU_SELESAI, dokter.getWaktu_Selesai());
 
         // Inserting Row
         db.insert(TABLE_DOKTER, null, values);
@@ -88,6 +91,8 @@ public class DatabaseHandler_Doctor extends SQLiteOpenHelper {
                 COLUMN_DOCTOR_ID,
                 COLUMN_DOCTOR_NAME,
                 COLUMN_DOCTOR_SPESIALIS,
+                COLUMN_DOCTOR_WAKTU_MULAI,
+                COLUMN_DOCTOR_WAKTU_SELESAI
         };
         // sorting orders
         String sortOrder =
@@ -118,6 +123,8 @@ public class DatabaseHandler_Doctor extends SQLiteOpenHelper {
                 dokter.setId_dokter(cursor.getString(cursor.getColumnIndex(COLUMN_DOCTOR_ID)));
                 dokter.setNama_dokter(cursor.getString(cursor.getColumnIndex(COLUMN_DOCTOR_NAME)));
                 dokter.setSpesialis_dokter(cursor.getString(cursor.getColumnIndex(COLUMN_DOCTOR_SPESIALIS)));
+                dokter.setWaktu_Mulai(cursor.getString(cursor.getColumnIndex(COLUMN_DOCTOR_WAKTU_MULAI)));
+                dokter.setWaktu_Selesai(cursor.getString(cursor.getColumnIndex(COLUMN_DOCTOR_WAKTU_SELESAI)));
                 // Adding user record to list
                 userList.add(dokter);
             } while (cursor.moveToNext());
@@ -130,7 +137,6 @@ public class DatabaseHandler_Doctor extends SQLiteOpenHelper {
     }
 
     public void deleteUser() {
-        String id="";
         SQLiteDatabase db = this.getWritableDatabase();
         // delete user record by id
         db.delete(TABLE_DOKTER,null,null);
