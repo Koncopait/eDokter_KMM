@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,8 +41,9 @@ import okhttp3.Response;
 public class RegisterActivity extends AppCompatActivity {
     Button sigup;
     UserSessionManager session;
-    EditText email_et,username_et, password_et, nm_depan, nm_belakang;
+    EditText email_et,username_et, password_et, nm_depan, nm_belakang,con_password_et;
     TextView login;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
@@ -51,8 +53,19 @@ public class RegisterActivity extends AppCompatActivity {
         username_et = (EditText) findViewById(R.id.sg_username);
         email_et = (EditText) findViewById(R.id.sg_email);
         password_et = (EditText) findViewById(R.id.ed_password);
+        con_password_et = (EditText) findViewById(R.id.sg_confirmpassword);
         nm_depan = (EditText) findViewById(R.id.nmdepan);
         nm_belakang = (EditText) findViewById(R.id.nmbelakang);
+        final TextInputLayout username_lay = (TextInputLayout) findViewById(R.id.textInputUsername);
+        final TextInputLayout password_lay = (TextInputLayout) findViewById(R.id.textInputPass);
+        final TextInputLayout email_lay = (TextInputLayout) findViewById(R.id.textInputemail);
+        final TextInputLayout nm_dpn_lay = (TextInputLayout) findViewById(R.id.textInputnmdepan);
+        final TextInputLayout nm_blkng_lay = (TextInputLayout) findViewById(R.id.textInputnmbelakang);
+        final TextInputLayout con_pass_lay = (TextInputLayout) findViewById(R.id.textInputconfirpass);
+
+
+
+
         login.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -75,7 +88,89 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        password_et.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange (View v, boolean hasFocus){
+                if (password_et.getText().length()< 6 || password_et.getText().length()> 15 ){
+                    password_lay.setError("Password between 6 and 10 alphanumeric characters.");
+                    sigup.setEnabled(false);
+                }else {
+                    password_lay.setError(null);
+                    sigup.setEnabled(true);
+                }
+            }
+        });
+
+        email_et.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange (View v, boolean hasFocus){
+                if (TextUtils.isEmpty(email_et.getText().toString()) || !email_et.getText().toString().matches(emailPattern)){
+                    email_lay.setError("Enter a valid email address.");
+                    sigup.setEnabled(false);
+                }else {
+                    email_lay.setError(null);
+                    sigup.setEnabled(true);
+                }
+            }
+        });
+
+        username_et.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange (View v, boolean hasFocus){
+                if (username_et.getText().toString().equals("")){
+                    username_lay.setError("Username is Empty.");
+                    sigup.setEnabled(false);
+                }else {
+                    username_lay.setError(null);
+                    sigup.setEnabled(true);
+                }
+            }
+        });
+
+        con_password_et.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange (View v, boolean hasFocus){
+                if (!con_password_et.getText().toString().equals(password_et.getText().toString())){
+                    con_pass_lay.setError("Password Doesn't Match.");
+                    sigup.setEnabled(false);
+                }else {
+                    con_pass_lay.setError(null);
+                    sigup.setEnabled(true);
+                }
+            }
+        });
+
+
+        nm_depan.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange (View v, boolean hasFocus){
+                if (nm_depan.getText().toString().equals("")){
+                    nm_dpn_lay.setError("Nama Depan is Empty.");
+                    sigup.setEnabled(false);
+                }else {
+                    nm_dpn_lay.setError(null);
+                    sigup.setEnabled(true);
+                }
+            }
+        });
+
+        nm_belakang.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange (View v, boolean hasFocus){
+                if (nm_belakang.getText().toString().equals("")){
+                    nm_blkng_lay.setError("Nama Belakang is Empty.");
+                    sigup.setEnabled(false);
+                }else {
+                    nm_blkng_lay.setError(null);
+                    sigup.setEnabled(true);
+                }
+            }
+        });
+
     }
+
+
+
     private class register extends AsyncTask<String, Void, String>
     {
         ProgressDialog pDialog;
@@ -128,7 +223,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) { //respon
-            pDialog.dismiss();
+
             JSONObject jObj = null;
             String reason;
             int register_status=100;
@@ -137,23 +232,30 @@ public class RegisterActivity extends AppCompatActivity {
                 jObj = new JSONObject(result);
                 JSONArray array_data= jObj.getJSONArray("daftar");
                 JSONObject explrObject = array_data.getJSONObject(0);
+                int status = explrObject.getInt("daftar_status");
                 reason = explrObject.getString("reason");
-                alertDialog.setMessage(reason);
-                alertDialog.setCancelable(false);
-                alertDialog.show();
 
+                if (status==0){
+                    pDialog.dismiss();
+                    alertDialog.setMessage(reason);
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                    new CountDownTimer(5000, 1000) {
+                        public void onFinish() {
+                            Intent forget = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(forget);
+                            finish();
+                        }
 
-                new CountDownTimer(5000, 1000) {
-                    public void onFinish() {
-                        Intent forget = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(forget);
-                        finish();
-                    }
+                        public void onTick(long millisUntilFinished) {
+                            // millisUntilFinished    The amount of time until finished.
+                        }
+                    }.start();
+                }else {
+                    alertDialog.setMessage(reason);
+                    alertDialog.show();
+                }
 
-                    public void onTick(long millisUntilFinished) {
-                        // millisUntilFinished    The amount of time until finished.
-                    }
-                }.start();
 
             }
             catch (JSONException e)

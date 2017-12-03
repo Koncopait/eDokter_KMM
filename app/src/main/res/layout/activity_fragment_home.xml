@@ -80,7 +80,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.ListViewCompat
-        android:id="@+id/list_pasien"
+        android:id="@+id/listpasien"
         android:layout_width="fill_parent"
         android:layout_height="460dp"
         android:layout_marginTop="104dp"

@@ -19,7 +19,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.shidiqarifs.edokter.Helper.DatabaseHandler_Doctor;
+import com.shidiqarifs.edokter.Helper.DatabaseHandler_Pasien;
 import com.shidiqarifs.edokter.Helper.Dokter;
+import com.shidiqarifs.edokter.Helper.Pasien;
 import com.shidiqarifs.edokter.Helper.UserSessionManager;
 import  com.shidiqarifs.edokter.Helper.get_url_link;
 
@@ -51,8 +53,6 @@ import okhttp3.Response;
 
 public class LoginActivity extends Activity  {
 
-    ProgressDialog pDialog;
-    AlertDialog alertDialog;
     Button login;
     TextView register;
     UserSessionManager session;
@@ -62,7 +62,9 @@ public class LoginActivity extends Activity  {
     String getPassword;
     TextView forgotpass,sigup;
     private DatabaseHandler_Doctor databaseHelper;
+    private DatabaseHandler_Pasien databaseHandler_pasien;
     private Dokter dokter;
+    private Pasien pasien;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +76,7 @@ public class LoginActivity extends Activity  {
         username_et = (EditText) findViewById(R.id.username);
         password_et = (EditText) findViewById(R.id.password);
         databaseHelper = new DatabaseHandler_Doctor(LoginActivity.this);
+        databaseHandler_pasien = new DatabaseHandler_Pasien(LoginActivity.this);
         sigup.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -213,10 +216,19 @@ public class LoginActivity extends Activity  {
                     JSONArray jsonArray= jObj.getJSONArray("Data");
                     JSONObject explrObject = jsonArray.getJSONObject(0);
                     user_status = explrObject.getInt("STATUS");
-                    if (user_status==0){
+
+                    if (user_status==1){
+                        String id_user = explrObject.getString("ID_PASIEN");
                         new getlist().execute();
                         Intent Home = new Intent(LoginActivity.this, MainActivity.class);
-                        session.createUserLoginSession(username,getPassword,String.valueOf(user_status));
+                        session.createUserLoginSession(id_user,password,String.valueOf(user_status));
+                        startActivity(Home);
+                        finish();
+                    }else if(user_status==0){
+                        String id_dokter = explrObject.getString("ID_DOKTER");
+                        new getlist_pasien().execute(id_dokter);
+                        Intent Home = new Intent(LoginActivity.this, MainActivity.class);
+                        session.createUserLoginSession(id_dokter,password,String.valueOf(user_status));
                         startActivity(Home);
                         finish();
                     }
@@ -301,4 +313,72 @@ public class LoginActivity extends Activity  {
         }
     }
 
+
+    private class getlist_pasien extends AsyncTask<String, Void, String>
+    {
+        ProgressDialog pDialog;
+
+        AlertDialog alertDialog;
+
+        @Override
+        public String doInBackground(String... params) {
+            get_url_link link = new get_url_link();
+            String id = params[0];
+            String url = link.getUrl_link("api_get_pasienlist");
+            String result = null;
+            try {
+                OkHttpClient client = new OkHttpClient();
+
+                MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+                RequestBody body = RequestBody.create(mediaType, "id="+id);
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .addHeader("content-type", "application/x-www-form-urlencoded")
+                        .addHeader("cache-control", "no-cache")
+                        .addHeader("postman-token", "4f580677-eb57-8c2c-f86f-c64ed651c6e0")
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                result = response.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            JSONObject jObj = null;
+            try
+            {
+                jObj = new JSONObject(result);
+                JSONArray array_data= jObj.getJSONArray("Data");
+                for (int i=0;i<array_data.length();i++)
+                {
+                    pasien = new Pasien();
+                    JSONObject explrObject = array_data.getJSONObject(i);
+                    String pasien_id,pasien_name,pasien_keluhan;
+                    pasien_id = explrObject.getString("ID_PASIEN");
+                    pasien_name = explrObject.getString("NAMA_PASIEN");
+                    pasien_keluhan = explrObject.getString("KELUHAN");
+                    pasien.setId_pasien(pasien_id);
+                    pasien.setNama_pasien(pasien_name);
+                    pasien.setKeluhan(pasien_keluhan);
+                    databaseHandler_pasien.addUser(pasien);
+                }
+            }
+            catch (JSONException e)
+            {
+                Log.e("JSON exception", e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
 }

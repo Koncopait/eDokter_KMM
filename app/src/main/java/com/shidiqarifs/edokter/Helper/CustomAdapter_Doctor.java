@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.shidiqarifs.edokter.DetailActivity;
 import com.shidiqarifs.edokter.R;
+import com.shidiqarifs.edokter.Recyle;
 import com.shidiqarifs.edokter.Splash_Activity;
 
 import java.io.BufferedReader;

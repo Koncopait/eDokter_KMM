@@ -23,25 +23,37 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     BottomNavigationView bottomNavigationView;
     UserSessionManager session;
+    String status ="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         session = new UserSessionManager(getApplicationContext());
-        if(savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment, HomeFragment.newInstance())
-                    .commit();
-        }
 
         if(session.checkLogin())
             finish();
-        if (!session.checkLogin()){
-            HashMap<String, String> user = session.getUserDetails();
-        }else{
+        if (session.checkLogin()){
             session.logoutUser();
+        }else{
+            HashMap<String, String> user = session.getUserDetails();
+            status = user.get(UserSessionManager.KEY_USER);
+            int status_user = Integer.parseInt(status);
         }
+        if (status.equals("1")){
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment, HomeFragment.newInstance())
+                        .commit();
+        }else if (status.equals("0")){
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment, Pasien_HomeFragment.newInstance())
+                        .commit();
+            }
+
+
+
+
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -53,8 +65,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                fragment = HomeFragment.newInstance();
-                break;
+                if (status.equals("1")){
+                    fragment = HomeFragment.newInstance();
+                    break;
+                }else {
+                    fragment = Pasien_HomeFragment.newInstance();
+                    break;
+                }
+
             case R.id.navigation_account:
                 fragment = AccountFragment.newInstance();
                 break;

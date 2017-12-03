@@ -4,10 +4,7 @@ package com.shidiqarifs.edokter.Helper;
  */
 
 public class get_url_link {
-    public static String url_link = "http://192.168.43.117/e-doctor/";
-
-
-
+    public static String url_link = "http://api.e-dokter.xyz/";
     public String getUrl_link(String type){
         return url_link+type+".php";
     }
